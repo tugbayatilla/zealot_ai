@@ -1,12 +1,13 @@
 from langchain_openai import AzureChatOpenAI
 from typing import Optional, Union
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from ....settings.Settings import Settings
 
 class LLM(AzureChatOpenAI):
     """
     Interited from AzureChatOpenAI Model
     """
+    settings: Settings = None
     
     def __init__(self, settings: Optional[Settings] = None, **kwargs) -> None:
         
@@ -18,6 +19,7 @@ class LLM(AzureChatOpenAI):
 
         super().__init__(**settings, **kwargs)
         
+        self.settings = settings
 
     def __call__(self, schema: Union[dict, BaseModel, None] = None) -> AzureChatOpenAI:
         """ 

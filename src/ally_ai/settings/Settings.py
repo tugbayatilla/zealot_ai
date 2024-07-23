@@ -14,8 +14,8 @@ class Settings(dict):
         Reads given yaml file
         - Use kwargs to override values
         """
-        self._path = path
-        self._section = section
+        self.path = path
+        self.section = section
 
         try:
             # read yaml file
@@ -34,7 +34,7 @@ class Settings(dict):
 
         except Exception as ex:
             logging.error(
-                f"Failed to read '{section}' section from '{self._path}'. Original: {ex}")
+                f"Failed to read '{section}' section from '{self.path}'. Original: {ex}")
             raise
 
     def _read_yaml(self, path):
@@ -46,4 +46,4 @@ class Settings(dict):
             raise
         except Exception as ex:
             raise YamlParseError(
-                f"File '{self._path}' could not be parsed correcty to yaml! Original: {ex}")
+                f"File '{self.path}' could not be parsed correcty to yaml! Original: {ex}")

@@ -4,7 +4,7 @@ import pytest
 def test_default_path():
     settings = Settings(section='llm')
 
-    assert settings._path == './app-settings.yaml'
+    assert settings.path == './app-settings.yaml'
 
 
 def test_change_default_path():
