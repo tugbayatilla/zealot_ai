@@ -5,11 +5,10 @@ from ....settings.Settings import Settings
 
 class Embeddings(AzureOpenAIEmbeddings):
 
-    def __init__(self, settings: Optional[Settings] = None, section: str = 'embeddings', **kwargs) -> None:
+    def __init__(self, settings: Optional[Settings] = None, **kwargs) -> None:
         if settings is None:
-            settings = Settings()
+            settings = Settings(section='embeddings')
 
-        section = settings(section=section)
-        section['azure_endpoint'] = section['endpoint']
+        settings['azure_endpoint'] = settings['endpoint']
 
-        super().__init__(**section, **kwargs)
+        super().__init__(**settings, **kwargs)

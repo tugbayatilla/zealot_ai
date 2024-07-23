@@ -4,7 +4,10 @@ from pydantic import BaseModel
 from ....settings.Settings import Settings
 
 class LLM(AzureChatOpenAI):
-
+    """
+    Interited from AzureChatOpenAI Model
+    """
+    
     def __init__(self, settings: Optional[Settings] = None, **kwargs) -> None:
         
         if settings is None:
