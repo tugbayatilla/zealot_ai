@@ -1,10 +1,8 @@
-from .models.langchain.openai.LLM import LLM, LLMSettings
-from .models.langchain.openai.Embeddings import Embeddings, EmbeddingSettings
+from .models.langchain.openai.LLM import LLM
+from .models.langchain.openai.Embeddings import Embeddings
 
 
 __all__ = [
     'LLM',
-    'LLMSettings',
     'Embeddings',
-    'EmbeddingSettings'
 ]

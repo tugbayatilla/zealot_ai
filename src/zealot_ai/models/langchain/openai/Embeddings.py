@@ -1,24 +1,15 @@
+from typing import Optional
 from langchain_openai import AzureOpenAIEmbeddings
-from ....settings import EmbeddingSettings
+from ....settings.Settings import Settings
 
 
-class Embeddings:
+class Embeddings(AzureOpenAIEmbeddings):
 
-    def __init__(self, settings: EmbeddingSettings) -> None:
-        self._settings = settings
+    def __init__(self, settings: Optional[Settings] = None, section: str = 'embeddings', **kwargs) -> None:
+        if settings is None:
+            settings = Settings()
 
-    def __call__(self) -> AzureOpenAIEmbeddings:
-        """ 
-        - Reads 'embeddings' section from the app-settings.yaml file and apply changes
-        - The values can be overriden in Settings
-        """
+        section = settings(section=section)
+        section['azure_endpoint'] = section['endpoint']
 
-        embed_model = AzureOpenAIEmbeddings(
-            api_key=self._settings.api_key,
-            azure_endpoint=self._settings.endpoint,
-            api_version=self._settings.api_version,
-            model=self._settings.model,
-            azure_deployment=self._settings.deployment_name,
-        )
-
-        return embed_model
+        super().__init__(**section, **kwargs)
