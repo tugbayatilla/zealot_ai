@@ -13,7 +13,8 @@ class LLM(AzureChatOpenAI):
         if settings is None:
             settings = Settings(section='llm')
 
-        settings['azure_endpoint'] = settings['endpoint']
+        settings['azure_endpoint'] = settings.pop('endpoint')
+        settings['azure_deployment'] = settings.pop('deployment_name')
 
         super().__init__(**settings, **kwargs)
         

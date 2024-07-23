@@ -9,6 +9,7 @@ class Embeddings(AzureOpenAIEmbeddings):
         if settings is None:
             settings = Settings(section='embeddings')
 
-        settings['azure_endpoint'] = settings['endpoint']
+        settings['azure_endpoint'] = settings.pop('endpoint')
+        settings['azure_deployment'] = settings.pop('deployment_name')
 
         super().__init__(**settings, **kwargs)
