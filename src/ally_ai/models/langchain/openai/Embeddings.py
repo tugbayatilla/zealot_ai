@@ -5,6 +5,8 @@ from ....settings.Settings import Settings
 
 class Embeddings(AzureOpenAIEmbeddings):
 
+    settings: Settings = None
+
     def __init__(self, settings: Optional[Settings] = None, **kwargs) -> None:
         if settings is None:
             settings = Settings(section='embeddings')
@@ -13,3 +15,6 @@ class Embeddings(AzureOpenAIEmbeddings):
         settings['azure_deployment'] = settings.pop('deployment_name')
 
         super().__init__(**settings, **kwargs)
+
+        self.settings = settings
+
