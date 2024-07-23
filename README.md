@@ -1,1 +1,1 @@
-# Zealot AI
+# Ally AI

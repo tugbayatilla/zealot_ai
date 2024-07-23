@@ -1,4 +1,4 @@
-from src.zealot_ai.langchain import LLM, Embeddings, Settings
+from src.ally_ai.langchain import LLM, Embeddings, Settings
 def test_llm_is_not_none():
     llm = LLM()
 

@@ -1,4 +1,4 @@
-from src.zealot_ai.settings.Settings import Settings
+from src.ally_ai.settings.Settings import Settings
 import pytest
 
 def test_default_path():
