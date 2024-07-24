@@ -1,4 +1,4 @@
-from src.ally_ai.settings.Settings import Settings
+from ally_ai_core import Settings
 import pytest
 from unittest.mock import patch
 from tests import TEST_SETTINGS_PATH
