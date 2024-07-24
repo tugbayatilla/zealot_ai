@@ -1,7 +1,7 @@
 from langchain_openai import AzureChatOpenAI
 from typing import Optional, Union
-from pydantic import BaseModel, Field
-from ....settings.Settings import Settings
+from pydantic import BaseModel
+from ally_ai_core import Settings
 
 class LLM(AzureChatOpenAI):
     """

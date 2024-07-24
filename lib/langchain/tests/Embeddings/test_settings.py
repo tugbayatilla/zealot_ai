@@ -1,4 +1,4 @@
-from src.ally_ai.langchain import Embeddings
+from ally_ai_langchain import Embeddings
 
 
 def test_settings_path_property():

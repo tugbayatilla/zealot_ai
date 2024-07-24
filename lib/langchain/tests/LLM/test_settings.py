@@ -1,4 +1,4 @@
-from src.ally_ai.langchain import LLM
+from ally_ai_langchain import LLM
 
 
 def test_settings_path_property():

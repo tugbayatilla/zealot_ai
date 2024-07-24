@@ -1,6 +1,6 @@
 from typing import Optional
 from langchain_openai import AzureOpenAIEmbeddings
-from ....settings.Settings import Settings
+from ally_ai_core import Settings
 
 
 class Embeddings(AzureOpenAIEmbeddings):
