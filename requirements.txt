@@ -2,3 +2,4 @@ pytest
 pyyaml==6.0.1
 langchain_openai
 packaging
+ally_ai_core
