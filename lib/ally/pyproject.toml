@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ally-ai"
-version = "0.0.5"
+version = "0.0.6"
 authors = [
   { name="Tugbay Atilla", email="tugbayatilla@gmail.com" },
 ]
@@ -19,6 +19,7 @@ classifiers = [
 dependencies = [
   "ally-ai-core",
   "ally-ai-langchain",
+  "ally-ai-llamaindex",
 ]
 
 [project.urls]
