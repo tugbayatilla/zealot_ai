@@ -1,6 +1,7 @@
 from llama_index.llms.azure_openai import AzureOpenAI
+from llama_index.core.base.llms.types import ChatResponse, ChatMessage
 from llama_index.core import Settings as LlamaSettings
-from typing import Optional
+from typing import Optional, Sequence, Any
 from ally_ai_core import Settings
 
 
@@ -23,3 +24,7 @@ class LLM(AzureOpenAI):
         self.settings = settings
 
         LlamaSettings.llm = self
+
+
+    def invoke(self, messages: Sequence[ChatMessage], **kwargs: Any) -> ChatResponse:
+        return self.chat(messages=messages, **kwargs)
