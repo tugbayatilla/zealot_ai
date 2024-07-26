@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ally-ai-llamaindex"
-version = "0.0.3"
+version = "0.0.4"
 authors = [
   { name="Tugbay Atilla", email="tugbayatilla@gmail.com" },
 ]
@@ -19,7 +19,7 @@ classifiers = [
 dependencies = [
   "llama-index-llms-azure-openai",
   "llama_index.embeddings.azure_openai",
-  "ally-ai-core>=0.0.2"
+  "ally-ai-core=*"
 ]
 
 [project.urls]
