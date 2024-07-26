@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "test-project-name"
+version = "0.0.7"
+authors = [
+  { name="Tugbay Atilla", email="tugbayatilla@gmail.com" },
+]
+description = "ally for your ai"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  "ally-ai-core>=0.0.1",
+  "ally-ai-langchain>=0.0.2",
+  "ally-ai-llamaindex>=0.0.3",
+]
+
+[project.urls]
+Homepage = "https://github.com/users/tugbayatilla/projects/3/"
+Issues = "https://github.com/users/tugbayatilla/projects/3/views/8"
