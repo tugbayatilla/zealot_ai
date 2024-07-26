@@ -1,7 +1,7 @@
 from typing import Optional
 from llama_index.embeddings.azure_openai import AzureOpenAIEmbedding
-from llama_index.core import LLamaSettings
-from ally_ai_core import Settings
+from llama_index.core import Settings as LlamaSettings
+from ally_ai.core import Settings
 
 
 class Embeddings(AzureOpenAIEmbedding):
@@ -19,5 +19,4 @@ class Embeddings(AzureOpenAIEmbedding):
 
         self.settings = settings
 
-        LLamaSettings.embed_model = self
-
+        LlamaSettings.embed_model = self
