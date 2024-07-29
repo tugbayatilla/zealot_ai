@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ally-ai-chroma"
-version = "0.0.1"
+version = "0.0.3"
 authors = [
   { name="Tugbay Atilla", email="tugbayatilla@gmail.com" },
 ]
@@ -17,9 +17,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "ally-ai-core",
+  "ally-ai-core>=0.0.3",
   "chromadb==0.5.3",
-  "langchain_chroma"
+  "langchain_chroma>=0.1.2"
 ]
 
 [project.urls]
