@@ -2,12 +2,11 @@ import chromadb
 from chromadb.config import Settings as ChromaSettings
 from langchain_chroma import Chroma as LangChainChroma
 from ally_ai_core import Settings
-from ally_ai_langchain import Embeddings
+from ally_ai_langchain import EmbeddingModel
 from typing import Optional
 import logging
-from .ChromaEmbeddingsVisualisation import ChromaEmbeddingsVisualisation
 
-class AllyChroma(LangChainChroma):
+class Chroma(LangChainChroma):
     """
     Interited from LangChain Chroma
     """
@@ -15,13 +14,13 @@ class AllyChroma(LangChainChroma):
 
     def __init__(self,
                  settings: Optional[Settings] = None,
-                 embeddings: Optional[Embeddings] = None,
+                 embeddings: Optional[EmbeddingModel] = None,
                  **kwargs) -> None:
 
         if settings is None:
             settings = Settings(section='chromadb')
         if embeddings is None:
-            embeddings = Embeddings()
+            embeddings = EmbeddingModel()
 
         self.ally_settings = settings
         persist_directory = settings.pop('persist_directory') if 'persist_directory' in settings else None
@@ -41,7 +40,3 @@ class AllyChroma(LangChainChroma):
                              embedding_function=embeddings,
                              create_collection_if_not_exists=False,
                              **kwargs)
-
-    def visualise(self, query:str, limit: Optional[int] = None):
-        cls = ChromaEmbeddingsVisualisation(self, limit=limit)
-        cls(query=query)
