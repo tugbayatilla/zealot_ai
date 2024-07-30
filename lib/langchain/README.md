@@ -27,7 +27,7 @@ embeddings:
 #### Use Default Settings in LLM
 
 ```python
-from ally_ai.langchain import LLM
+from ally_ai_langchain import LLM
 
 llm = LLM()
 response = llm.invoke('What is an ally?')
@@ -43,7 +43,7 @@ my_llm:
 ```
 
 ```python
-from ally_ai.langchain import LLM, Settings
+from ally_ai_langchain import LLM, Settings
 
 settings = Settings(section='my_llm')
 llm = LLM(settings=settings)
@@ -54,7 +54,7 @@ print(llm.settings.section)
 #### Override Settings in LLM
 
 ```python
-from ally_ai.langchain import LLM, Settings
+from ally_ai_langchain import LLM, Settings
 
 settings = Settings(section='my_llm', api_key='<new-api-key>')
 llm = LLM(settings=settings)
@@ -66,10 +66,10 @@ print(response)
 ### How to Create Embeddings
 
 ```python
-from ally_ai.langchain import Embeddings
+from ally_ai_langchain import EmbeddingModel
 
-embeddings = Embeddings()
-response = embeddings.embed_query('What is an ally?')
+model = EmbeddingModel()
+response = model.embed_query('What is an ally?')
 print(response)
 ```
 

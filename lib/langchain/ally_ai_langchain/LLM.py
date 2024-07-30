@@ -2,12 +2,15 @@ from langchain_openai import AzureChatOpenAI
 from typing import Optional, Union
 from pydantic import BaseModel
 from ally_ai_core import Settings
+import logging
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 class LLM(AzureChatOpenAI):
     """
     Interited from AzureChatOpenAI Model
     """
-    settings: Settings = None
+    ally_settings: Settings = None
     
     def __init__(self, settings: Optional[Settings] = None, **kwargs) -> None:
         
@@ -19,7 +22,7 @@ class LLM(AzureChatOpenAI):
 
         super().__init__(**settings, **kwargs)
         
-        self.settings = settings
+        self.ally_settings = settings
 
     def __call__(self, schema: Union[dict, BaseModel, None] = None) -> AzureChatOpenAI:
         """ 
