@@ -2,11 +2,13 @@ from typing import Optional
 from llama_index.embeddings.azure_openai import AzureOpenAIEmbedding
 from llama_index.core import Settings as LlamaSettings
 from ally_ai.core import Settings
+import logging
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+logger = logging.getLogger(__name__)
 
+class EmbeddingModel(AzureOpenAIEmbedding):
 
-class Embeddings(AzureOpenAIEmbedding):
-
-    settings: Settings = None
+    ally_settings: Settings = None
 
     def __init__(self, settings: Optional[Settings] = None, **kwargs) -> None:
         if settings is None:
@@ -17,6 +19,6 @@ class Embeddings(AzureOpenAIEmbedding):
 
         super().__init__(**settings, **kwargs)
 
-        self.settings = settings
+        self.ally_settings = settings
 
         LlamaSettings.embed_model = self

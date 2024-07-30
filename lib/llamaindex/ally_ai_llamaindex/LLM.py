@@ -3,7 +3,9 @@ from llama_index.core.base.llms.types import ChatResponse, ChatMessage
 from llama_index.core import Settings as LlamaSettings
 from typing import Optional, Sequence, Any
 from ally_ai_core import Settings
-
+import logging
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 class LLM(AzureOpenAI):
     """
