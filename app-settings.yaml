@@ -14,7 +14,9 @@ embeddings:
   model: "<model-name>"
   deployment_name: '<deployment-name>'
 
-vectordb:
-  endpoint: "<endpoint>"
+chromadb:
+  host: "<endpoint>"
   port: 8000
+  ssl: False
+  #persist_directory: './chroma/chroma'
   

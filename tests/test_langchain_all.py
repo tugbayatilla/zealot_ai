@@ -1,4 +1,4 @@
-from ally_ai_langchain import LLM, Embeddings, Settings
+from ally_ai_langchain import LLM, EmbeddingModel, Settings
 
 
 def test_llm_is_not_none():
@@ -8,7 +8,7 @@ def test_llm_is_not_none():
 
 
 def test_embeddings_is_not_none():
-    embeddings = Embeddings()
+    embeddings = EmbeddingModel()
 
     assert embeddings is not None
 
