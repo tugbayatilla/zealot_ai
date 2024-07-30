@@ -2,7 +2,9 @@ import yaml
 import logging
 from typing import Literal
 from ..errors import YamlParseError
-
+import logging
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 class Settings(dict):
     """
@@ -33,7 +35,7 @@ class Settings(dict):
             })
 
         except Exception as ex:
-            logging.error(
+            logger.error(
                 f"Failed to read '{section}' section from '{self.path}'. Original: {ex}")
             raise
 

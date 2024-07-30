@@ -3,10 +3,13 @@ import umap
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-
+import logging
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 class EmbeddingsVisualisation:
     def __init__(self, all_embeddings) -> None:
+        logger.info('init is called')
 
         self.all_embeddings = all_embeddings
         self._all_embeddings_2d = None
@@ -24,6 +27,14 @@ class EmbeddingsVisualisation:
         return umap_embeddings
 
     def __call__(self, title: str, query_embeddings: List[float], document_embeddings: List[List[float]]) -> None:
+        """
+        - Makes similariy search and retrieves documents
+        - Displays
+            - All documents as gray dot
+            - Marks query with 'red X'
+            - Marks retrieved documents with 'green circle'
+        """
+        
         self.visualise(
             title=title,
             query_embeddings=query_embeddings,
@@ -36,7 +47,6 @@ class EmbeddingsVisualisation:
             - All documents as gray dot
             - Marks query with 'red X'
             - Marks retrieved documents with 'green circle'
-
         """
 
         if self._all_embeddings_2d is None:

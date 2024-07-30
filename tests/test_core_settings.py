@@ -2,7 +2,7 @@ from ally_ai_core import Settings
 import pytest
 from unittest.mock import patch
 from tests import TEST_SETTINGS_PATH
-
+import logging
 
 def test_default_path():
     settings = Settings(section='llm')
@@ -28,14 +28,13 @@ def test_section_must_be_given():
         Settings()
 
 
-def test_no_app_setting_file_logs_error_once():
+def test_no_app_setting_file_logs_error_once(caplog):
     
-    with patch('logging.error') as mock_error:
-        with pytest.raises(Exception) as ex:
+    with caplog.at_level(logging.DEBUG):
+        with pytest.raises(Exception):
             Settings(section='',path='no_such_file')
 
-    print(ex)
-    mock_error.assert_called_once()
+    assert 'Failed to read' in caplog.text
 
 
 @pytest.mark.parametrize(
