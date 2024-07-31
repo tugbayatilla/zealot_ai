@@ -10,7 +10,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class EmbeddingsVisualisation:
+class EmbeddingsVisualisor:
     def __init__(self, all_embeddings) -> None:
         logger.info('init is called')
 
@@ -28,25 +28,6 @@ class EmbeddingsVisualisation:
         for i, embedding in enumerate(tqdm(embeddings)):
             umap_embeddings[i] = self.umap_transform.transform([embedding])
         return umap_embeddings
-
-    def __call__(self,
-                 title: str,
-                 query_embeddings: List[float],
-                 document_embeddings: List[List[float]],
-                 figure: Optional[Figure] = None) -> Figure:
-        """
-        - Makes similariy search and retrieves documents
-        - Displays
-            - All documents as gray dot
-            - Marks query with 'red X'
-            - Marks retrieved documents with 'green circle'
-        """
-
-        return self.visualise(
-            title=title,
-            query_embeddings=query_embeddings,
-            document_embeddings=document_embeddings,
-            figure=figure)
 
     def visualise(self, 
                   title: str, 
