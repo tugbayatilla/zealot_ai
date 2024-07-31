@@ -1,4 +1,5 @@
 from typing import List
+from matplotlib.figure import Figure
 import umap
 import numpy as np
 from tqdm import tqdm
@@ -26,7 +27,7 @@ class EmbeddingsVisualisation:
             umap_embeddings[i] = self.umap_transform.transform([embedding])
         return umap_embeddings
 
-    def __call__(self, title: str, query_embeddings: List[float], document_embeddings: List[List[float]]) -> None:
+    def __call__(self, title: str, query_embeddings: List[float], document_embeddings: List[List[float]]) -> plt:
         """
         - Makes similariy search and retrieves documents
         - Displays
@@ -35,30 +36,49 @@ class EmbeddingsVisualisation:
             - Marks retrieved documents with 'green circle'
         """
         
-        self.visualise(
+        return self.visualise(
             title=title,
             query_embeddings=query_embeddings,
             document_embeddings=document_embeddings)
 
-    def visualise(self, title: str, query_embeddings: List[float], document_embeddings: List[List[float]]) -> None:
+    def visualise(self, title: str, query_embeddings: List[float], document_embeddings: List[List[float]]) -> Figure:
         """
         - Makes similariy search and retrieves documents
         - Displays
-            - All documents as gray dot
-            - Marks query with 'red X'
-            - Marks retrieved documents with 'green circle'
+            - Creates gray dots for 'documents'
+            - Marks 'query embedding' with 'red X'
+            - Marks 'retrieved documents embeddings' with 'green circle'
+        
+        ### Example
+
+        if you want to add more scatter.
+        
+        Every visualise calls `plt.figure()` means 
+        'Create a new figure, or activate an existing figure.'
+
+        ```
+        figure = visualise(...)
+        plt.figure(FigureClass=figure)
+        plt.scatter(data_2d[:, 0], data_2d[:, 1], 
+                    s=150, marker='X', color='r')
+        ```
         """
 
         if self._all_embeddings_2d is None:
+            logger.info('converting all document embeddings to 2D')
             self._all_embeddings_2d = self.convert_embeddings_to_2D(
                 self.all_embeddings)
 
+        logger.info('converting query embeddings to 2D')
         query_embeddings_2d = self.convert_embeddings_to_2D([query_embeddings])
+        
+        logger.info('converting retrieved document embeddings to 2D')
         document_embeddings_2d = self.convert_embeddings_to_2D(
             document_embeddings)
 
         # Plot the projected query and retrieved documents in the embedding space
-        plt.figure()
+        logger.info('visualise pyplot')
+        figure = plt.figure()
         plt.scatter(
             self._all_embeddings_2d[:, 0], self._all_embeddings_2d[:, 1], s=10, color='gray')
         plt.scatter(
@@ -69,3 +89,5 @@ class EmbeddingsVisualisation:
         plt.gca().set_aspect('equal', 'datalim')
         plt.title(f'{title}')
         plt.axis('off')
+        
+        return figure
