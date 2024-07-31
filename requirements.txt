@@ -8,6 +8,7 @@ llama-index-llms-azure-openai
 llama_index.embeddings.azure_openai
 
 langchain_chroma
+chromadb==0.5.3
 
 umap-learn
 matplotlib
