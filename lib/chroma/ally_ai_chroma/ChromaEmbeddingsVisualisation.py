@@ -16,7 +16,7 @@ class ChromaEmbeddingsVisualisation:
         self.chroma_client = chroma
         self.document_embeddings, self.documents = self.get_documents_and_embeddings(
             limit=limit)
-        self.visualisation = EmbeddingsVisualisation(
+        self._embedding_visualisation_class = EmbeddingsVisualisation(
             self.document_embeddings)
 
     def get_documents_and_embeddings(self, limit: Optional[int] = None):
@@ -32,6 +32,16 @@ class ChromaEmbeddingsVisualisation:
 
     def __call__(self, query, search_type: Literal['similarity', 'mmr', 'similarity_score_threshold'] = 'mmr', **kwargs) -> Figure:
         """
+        Calls the visualise method.
+
+        Visualise method docstring:
+        """ + self.visualise.__doc__
+
+        return self.visualise(query=query, search_type=search_type, **kwargs)
+    
+
+    def visualise(self, query, search_type: Literal['similarity', 'mmr', 'similarity_score_threshold'] = 'mmr', **kwargs) -> Figure:
+        """
         - Makes similariy search and retrieves documents
         - Displays
             - All documents as gray dot
@@ -39,14 +49,18 @@ class ChromaEmbeddingsVisualisation:
             - Marks retrieved documents with 'green circle'
 
         """
-        logger.info(f"retrieving documents. Query: {query}")
+        logger.info(f"retrieving documents. Query: '{query}'")
         retrieved_documents = self.chroma_client.search(
             query=query, search_type=search_type, **kwargs)
-
-        logger.info(f"embedding the query. Query: {query}")
+        
+        logger.info(f"embedding retrieved documents. Len:{len(retrieved_documents)}")
+        retrieved_documents_embeddings = self.chroma_client.embeddings.embed_documents(
+            [doc.page_content for doc in retrieved_documents]) 
+        
+        logger.info(f"embedding the query. Query: '{query}'")
         query_embeddings = self.chroma_client.embeddings.embed_query(query)
 
-        return self.visualisation(
+        return self._embedding_visualisation_class(
             title=query,
             query_embeddings=query_embeddings,
-            document_embeddings=retrieved_documents)
+            document_embeddings=retrieved_documents_embeddings)
