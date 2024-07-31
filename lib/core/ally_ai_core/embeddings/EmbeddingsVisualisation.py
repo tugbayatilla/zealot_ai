@@ -1,12 +1,14 @@
-from typing import List
+from typing import List, Optional
 from matplotlib.figure import Figure
 import umap
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import logging
-logging.basicConfig(format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
 logger = logging.getLogger(__name__)
+
 
 class EmbeddingsVisualisation:
     def __init__(self, all_embeddings) -> None:
@@ -27,7 +29,11 @@ class EmbeddingsVisualisation:
             umap_embeddings[i] = self.umap_transform.transform([embedding])
         return umap_embeddings
 
-    def __call__(self, title: str, query_embeddings: List[float], document_embeddings: List[List[float]]) -> plt:
+    def __call__(self,
+                 title: str,
+                 query_embeddings: List[float],
+                 document_embeddings: List[List[float]],
+                 figure: Optional[Figure] = None) -> Figure:
         """
         - Makes similariy search and retrieves documents
         - Displays
@@ -35,30 +41,35 @@ class EmbeddingsVisualisation:
             - Marks query with 'red X'
             - Marks retrieved documents with 'green circle'
         """
-        
+
         return self.visualise(
             title=title,
             query_embeddings=query_embeddings,
-            document_embeddings=document_embeddings)
+            document_embeddings=document_embeddings,
+            figure=figure)
 
-    def visualise(self, title: str, query_embeddings: List[float], document_embeddings: List[List[float]]) -> Figure:
+    def visualise(self, 
+                  title: str, 
+                  query_embeddings: List[float], 
+                  document_embeddings: List[List[float]], 
+                  figure: Optional[Figure] = None) -> Figure:
         """
         - Makes similariy search and retrieves documents
         - Displays
             - Creates gray dots for 'documents'
             - Marks 'query embedding' with 'red X'
             - Marks 'retrieved documents embeddings' with 'green circle'
-        
+
         ### Example
 
         if you want to add more scatter.
-        
+
         Every visualise calls `plt.figure()` means 
         'Create a new figure, or activate an existing figure.'
 
         ```
         figure = visualise(...)
-        plt.figure(FigureClass=figure)
+        plt.figure(num=figure)
         plt.scatter(data_2d[:, 0], data_2d[:, 1], 
                     s=150, marker='X', color='r')
         ```
@@ -72,14 +83,14 @@ class EmbeddingsVisualisation:
 
         logger.info('converting query embeddings to 2D')
         query_embeddings_2d = self.convert_embeddings_to_2D([query_embeddings])
-        
+
         logger.info('converting retrieved document embeddings to 2D.')
         document_embeddings_2d = self.convert_embeddings_to_2D(
             document_embeddings)
 
         # Plot the projected query and retrieved documents in the embedding space
         logger.info('visualise pyplot.')
-        figure = plt.figure()
+        figure = plt.figure(num=figure)
         plt.scatter(
             self._all_embeddings_2d[:, 0], self._all_embeddings_2d[:, 1], s=10, color='gray')
         plt.scatter(
@@ -90,5 +101,5 @@ class EmbeddingsVisualisation:
         plt.gca().set_aspect('equal', 'datalim')
         plt.title(f'{title}')
         plt.axis('off')
-        
+
         return figure
