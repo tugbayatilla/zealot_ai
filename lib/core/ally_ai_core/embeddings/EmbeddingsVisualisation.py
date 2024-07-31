@@ -63,21 +63,22 @@ class EmbeddingsVisualisation:
                     s=150, marker='X', color='r')
         ```
         """
+        logger.info('starting visualisation.')
 
         if self._all_embeddings_2d is None:
-            logger.info('converting all document embeddings to 2D')
+            logger.info('converting all document embeddings to 2D.')
             self._all_embeddings_2d = self.convert_embeddings_to_2D(
                 self.all_embeddings)
 
         logger.info('converting query embeddings to 2D')
         query_embeddings_2d = self.convert_embeddings_to_2D([query_embeddings])
         
-        logger.info('converting retrieved document embeddings to 2D')
+        logger.info('converting retrieved document embeddings to 2D.')
         document_embeddings_2d = self.convert_embeddings_to_2D(
             document_embeddings)
 
         # Plot the projected query and retrieved documents in the embedding space
-        logger.info('visualise pyplot')
+        logger.info('visualise pyplot.')
         figure = plt.figure()
         plt.scatter(
             self._all_embeddings_2d[:, 0], self._all_embeddings_2d[:, 1], s=10, color='gray')
