@@ -1,22 +1,21 @@
 from typing import Literal, Optional
 
-from matplotlib.figure import Figure
 from .Chroma import Chroma
-from ally_ai_core.embeddings.EmbeddingsVisualisation import EmbeddingsVisualisation
+from ally_ai_core.embeddings.EmbeddingsVisualisor import EmbeddingsVisualisor
 import logging
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
-class ChromaEmbeddingsVisualisation:
+class ChromaEmbeddingsVisualisor:
     def __init__(self, chroma: Chroma, limit: Optional[int] = None) -> None:
         logger.info("init is called.")
 
         self.chroma_client = chroma
         self.document_embeddings, self.documents = self.get_documents_and_embeddings(
             limit=limit)
-        self._embedding_visualisation_class = EmbeddingsVisualisation(
+        self._embedding_visualisation_class = EmbeddingsVisualisor(
             self.document_embeddings)
 
     def get_documents_and_embeddings(self, limit: Optional[int] = None):
@@ -30,14 +29,6 @@ class ChromaEmbeddingsVisualisation:
         logger.info(f"total documents: {len(documents)}")
         return (document_embeddings, documents)
 
-    def __call__(self, query, search_type: Literal['similarity', 'mmr', 'similarity_score_threshold'] = 'mmr', **kwargs) -> Figure:
-        """
-        Calls the visualise method.
-
-        Visualise method docstring:
-        """ + self.visualise.__doc__
-
-        return self.visualise(query=query, search_type=search_type, **kwargs)
 
     def search(self, query:str, search_type: Literal['similarity', 'mmr', 'similarity_score_threshold'] = 'mmr', **kwargs) -> dict:
         """
@@ -79,11 +70,21 @@ class ChromaEmbeddingsVisualisation:
             - Marks query with 'red X'
             - Marks retrieved documents with 'green circle'
 
+        Output structure:
+        ```python
+        {
+            'query': Any,
+            'query_embeddings': Any,
+            'retrieved_documents': Any,
+            'retrieved_documents_embeddings': Any,
+            'figure': figure
+        }
+        ```
         """
         
         search_results = self.search(query=query, search_type=search_type, **kwargs)
 
-        figure = self._embedding_visualisation_class(
+        figure = self._embedding_visualisation_class.visualise(
             title=query,
             query_embeddings=search_results['query_embeddings'],
             document_embeddings=search_results['retrieved_documents_embeddings']
@@ -102,9 +103,19 @@ class ChromaEmbeddingsVisualisation:
             - Marks query with 'red X'
             - Marks retrieved documents with 'green circle'
 
+        Output structure:
+        ```python
+        {
+            'query': Any,
+            'query_embeddings': Any,
+            'retrieved_documents': Any,
+            'retrieved_documents_embeddings': Any,
+            'figure': figure
+        }
+        ```
         """
         
-        figure = self._embedding_visualisation_class(
+        figure = self._embedding_visualisation_class.visualise(
             title=search_results['query'],
             query_embeddings=search_results['query_embeddings'],
             document_embeddings=search_results['retrieved_documents_embeddings']
