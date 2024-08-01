@@ -7,8 +7,11 @@ from ally_ai_langchain import EmbeddingModel
 
 @pytest.fixture
 def instance():
-    chroma_settings = Settings(section='chromadb', path='./app-settings-integration.yaml')
-    embedding_settings = Settings(section='embeddings', path='./app-settings-integration.yaml')
+    path='./tests/chroma/app-settings.yaml'
+
+    chroma_settings = Settings(section='chromadb', path=path)
+    embedding_settings = Settings(section='embeddings', path=path)
+    
     embeddingModel = EmbeddingModel(settings=embedding_settings)
     chroma=Chroma(settings=chroma_settings, embeddingModel=embeddingModel)
 
