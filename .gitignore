@@ -8,5 +8,4 @@ __pycache__
 
 .DS_Store
 
-# contains sensitive data
-app-settings-integration.yaml
+.env
