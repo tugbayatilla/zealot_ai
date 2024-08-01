@@ -1,10 +1,12 @@
 import yaml
 import logging
-from typing import Literal
+from typing import List, Literal
 from ..errors import YamlParseError
 import logging
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
 logger = logging.getLogger(__name__)
+import re 
+import os
 
 class Settings(dict):
     """
@@ -22,6 +24,8 @@ class Settings(dict):
         try:
             # read yaml file
             yaml_content = self._read_yaml(path)
+
+            self._replace_with_environment_variables(yaml_content)
 
             # add values
             yaml_section = yaml_content[section]
@@ -49,3 +53,20 @@ class Settings(dict):
         except Exception as ex:
             raise YamlParseError(
                 f"File '{self.path}' could not be parsed correcty to yaml! Original: {ex}")
+
+    def _set_nested_value(self, yaml_data:dict, keys:List[str], value):
+        for key in keys[:-1]:
+            yaml_data = yaml_data.setdefault(key, {})
+        yaml_data[keys[-1]] = value
+
+    def _replace_with_environment_variables(self, yaml_content):
+        # Pattern to match environment variables with double underscores
+        pattern = re.compile(r'(?i)^[a-z][a-z0-9_]*(?:__[a-z][a-z0-9_]*)+$')
+
+        # Process each environment variable
+        for key, value in os.environ.items():
+            if pattern.match(key):
+                # Split the key into parts
+                keys = key.lower().split('__')
+                # Update the YAML configuration
+                self._set_nested_value(yaml_content, keys, value)

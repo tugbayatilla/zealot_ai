@@ -1,13 +1,35 @@
-from ally_ai_core import Settings
+from ally_ai_core.settings.Settings import Settings
 import pytest
-from unittest.mock import patch
+import os
 from tests import TEST_SETTINGS_PATH
 import logging
 
-def test_default_path():
-    settings = Settings(section='llm')
+@pytest.fixture
+def llm_settings():
+     return Settings(section='llm', path=TEST_SETTINGS_PATH)
 
-    assert settings.path == './app-settings.yaml'
+def test_load_settings(llm_settings):
+    assert llm_settings is not None
+
+def test_api_key(llm_settings):
+    assert llm_settings['api_key'] == '<private-key>'
+
+@pytest.mark.parametrize('env_key, key, expected', 
+    [
+        ('LLM__API_KEY','api_key', '<new_api_key>'),
+        ('LLM__api_KEY','api_key', '<new_api_key>'),
+        ('LLM__endpoint','endpoint', '<new_endpoint>'),
+     ])
+def test_api_key_override(env_key, key, expected):
+
+    os.environ[env_key] = expected
+    settings = Settings(section='llm', path='./tests/test-app-settings.yaml')
+    del os.environ[env_key]
+    
+    assert settings[key] == expected
+
+def test_default_path():
+    assert Settings(section='llm').path == './app-settings.yaml'
 
 
 def test_change_default_path():
@@ -24,7 +46,7 @@ def test_kwargs():
 
 def test_section_must_be_given():
     
-    with pytest.raises(TypeError) as ex:
+    with pytest.raises(TypeError):
         Settings()
 
 
@@ -61,7 +83,7 @@ def test_default_api_key():
 
 
 def test_override_default_api_key():
-    new_api_key = 'new_api_key'
+    new_api_key = 'test_override_default_api_key'
     settings = Settings(path=TEST_SETTINGS_PATH,
                         section='llm',
                         api_key=new_api_key)
