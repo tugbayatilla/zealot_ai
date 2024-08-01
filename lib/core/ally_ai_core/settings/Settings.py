@@ -57,7 +57,8 @@ class Settings(dict):
     def _set_nested_value(self, yaml_data:dict, keys:List[str], value):
         for key in keys[:-1]:
             yaml_data = yaml_data.setdefault(key, {})
-        yaml_data[keys[-1]] = value
+        if value is not None and value:
+            yaml_data[keys[-1]] = value
 
     def _replace_with_environment_variables(self, yaml_content):
         # Pattern to match environment variables with double underscores
