@@ -1,7 +1,7 @@
 import pytest
 from ally_ai_langchain import EmbeddingModel
 from openai import APIConnectionError
-
+from ..Utils import env_var_on_off
 
 def test_default_embeddings_is_not_none():
     embeddings = EmbeddingModel()
@@ -27,6 +27,6 @@ def test_settings_section_property():
 
 
 def test_settings_has_api_key():
-    embeddings = EmbeddingModel()
-
-    assert embeddings.ally_settings['api_key'] == '<private-key>'
+    with env_var_on_off('EMBEDDINGS__API_KEY', ''):
+        embeddings = EmbeddingModel()
+        assert embeddings.ally_settings['api_key'] == '<private-key>'

@@ -3,16 +3,19 @@ import pytest
 import os
 from tests import TEST_SETTINGS_PATH
 import logging
+from ..Utils import env_var_on_off
 
 @pytest.fixture
 def llm_settings():
-     return Settings(section='llm', path=TEST_SETTINGS_PATH)
+     return Settings(section='llm')
 
 def test_load_settings(llm_settings):
     assert llm_settings is not None
 
-def test_api_key(llm_settings):
-    assert llm_settings['api_key'] == '<private-key>'
+def test_api_key():
+    with env_var_on_off('LLM__API_KEY', ''):
+        settings = Settings(section='llm')
+        assert settings['api_key'] == '<private-key>'
 
 @pytest.mark.parametrize('env_key, key, expected', 
     [
@@ -23,7 +26,7 @@ def test_api_key(llm_settings):
 def test_api_key_override(env_key, key, expected):
 
     os.environ[env_key] = expected
-    settings = Settings(section='llm', path='./tests/test-app-settings.yaml')
+    settings = Settings(section='llm')
     del os.environ[env_key]
     
     assert settings[key] == expected

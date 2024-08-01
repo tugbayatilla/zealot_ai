@@ -12,3 +12,5 @@ chromadb==0.5.3
 
 umap-learn
 matplotlib
+
+coverage

@@ -1,1 +1,1 @@
-TEST_SETTINGS_PATH = './tests/test-app-settings.yaml'
+TEST_SETTINGS_PATH = './app-settings.yaml'
