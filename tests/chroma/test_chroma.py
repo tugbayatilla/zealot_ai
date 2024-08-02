@@ -1,0 +1,30 @@
+from ally_ai.chroma import Chroma
+import pytest
+
+from ally_ai_core.settings.Settings import Settings
+from ally_ai_langchain import EmbeddingModel
+
+@pytest.fixture
+def instance():
+    path='./tests/chroma/app-settings.yaml'
+
+    chroma_settings = Settings(section='chromadb', path=path)
+    embedding_settings = Settings(section='embeddings', path=path)
+    
+    embeddingModel = EmbeddingModel(settings=embedding_settings)
+    return Chroma(settings=chroma_settings, embeddingModel=embeddingModel)
+
+@pytest.mark.integration
+def test_query_document(instance):
+    results = instance.query('what is an ally?', n_results=2, include=['documents'])
+    retrieved_documents = results['documents'][0]
+    
+    assert len(retrieved_documents) == 2
+
+@pytest.mark.integration
+def test_query_embeddings(instance):
+    results = instance.query('what is an ally?', n_results=2, include=['embeddings'])
+    retrieved_documents = results['embeddings'][0]
+    
+    assert len(retrieved_documents) == 2
+

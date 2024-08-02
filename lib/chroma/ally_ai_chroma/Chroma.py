@@ -40,3 +40,16 @@ class Chroma(LangChainChroma):
                              embedding_function=embeddingModel,
                              create_collection_if_not_exists=False,
                              **kwargs)
+
+    def query(self, 
+        query_texts: str,
+        n_results: int = 10,
+        include: chromadb.Include = ["metadatas", "documents", "distances"]):
+
+        query_embedding = self._embedding_function.embed_query(query_texts)
+    
+        return self._collection.query(
+            query_embeddings=[query_embedding], 
+            n_results=n_results,
+            include=include
+        )

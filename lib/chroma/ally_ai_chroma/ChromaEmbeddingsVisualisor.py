@@ -84,16 +84,7 @@ class ChromaEmbeddingsVisualisor:
         
         search_results = self.search(query=query, search_type=search_type, **kwargs)
 
-        figure = self._embedding_visualisation_class.visualise(
-            title=query,
-            query_embeddings=search_results['query_embeddings'],
-            document_embeddings=search_results['retrieved_documents_embeddings']
-        )
-
-        return {
-            'figure': figure,
-            **search_results
-        }
+        return self.visualise_search(search_results=search_results)
 
     def visualise_search(self, search_results: dict) -> dict:
         """
