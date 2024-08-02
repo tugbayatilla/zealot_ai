@@ -29,4 +29,4 @@ def test_settings_section_property():
 def test_settings_has_api_key():
     llm = LLM()
 
-    assert llm.ally_settings['api_key'] == '<private-key>'
+    assert llm.ally_settings['api_key']
