@@ -24,12 +24,9 @@ def test_api_key():
         ('LLM__endpoint','endpoint', '<new_endpoint>'),
      ])
 def test_api_key_override(env_key, key, expected):
-
-    os.environ[env_key] = expected
-    settings = Settings(section='llm')
-    del os.environ[env_key]
-    
-    assert settings[key] == expected
+    with env_var_on_off(env_key, expected):
+        settings = Settings(section='llm')
+        assert settings[key] == expected
 
 def test_default_path():
     assert Settings(section='llm').path == './app-settings.yaml'
@@ -80,7 +77,7 @@ def test_app_setting_file(section, keys):
 
 
 def test_default_api_key():
-    settings = Settings(path=TEST_SETTINGS_PATH, section='llm')
+    settings = Settings(path=TEST_SETTINGS_PATH, section='test-llm')
 
     assert settings['api_key'] == '<private-key>'
 
@@ -88,7 +85,7 @@ def test_default_api_key():
 def test_override_default_api_key():
     new_api_key = 'test_override_default_api_key'
     settings = Settings(path=TEST_SETTINGS_PATH,
-                        section='llm',
+                        section='test-llm',
                         api_key=new_api_key)
     print('settings:', settings)
     assert settings['api_key'] == new_api_key
