@@ -28,3 +28,10 @@ def test_query_embeddings(instance):
     
     assert len(retrieved_documents) == 2
 
+@pytest.mark.integration
+def test_multiple_query(instance):
+    queries = ['what is an ally?', 'do we need it?']
+    results = instance.query(query_texts=queries, n_results=2, include=['documents'])
+    retrieved_documents = results['documents'][0]
+    
+    assert len(retrieved_documents) == 2

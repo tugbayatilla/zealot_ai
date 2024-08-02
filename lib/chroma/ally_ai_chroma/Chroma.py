@@ -1,4 +1,5 @@
 import chromadb
+from chromadb.api.types import OneOrMany
 from chromadb.config import Settings as ChromaSettings
 from langchain_chroma import Chroma as LangChainChroma
 from ally_ai_core import Settings
@@ -42,14 +43,14 @@ class Chroma(LangChainChroma):
                              **kwargs)
 
     def query(self, 
-        query_texts: str,
+        query_texts: Optional[OneOrMany[str]] = None,
         n_results: int = 10,
         include: chromadb.Include = ["metadatas", "documents", "distances"]):
 
-        query_embedding = self._embedding_function.embed_query(query_texts)
+        query_embeddings = [self._embedding_function.embed_query(query_text) for query_text in query_texts]
     
         return self._collection.query(
-            query_embeddings=[query_embedding], 
+            query_embeddings=query_embeddings, 
             n_results=n_results,
             include=include
         )
