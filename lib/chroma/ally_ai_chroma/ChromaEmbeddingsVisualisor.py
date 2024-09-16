@@ -1,7 +1,7 @@
 from typing import Literal, Optional
 
 from .Chroma import Chroma
-from ally_ai_core.embeddings.EmbeddingsVisualisor import EmbeddingsVisualisor
+from ally_ai_chroma.EmbeddingsVisualisor import EmbeddingsVisualisor
 import logging
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")

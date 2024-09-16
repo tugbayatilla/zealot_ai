@@ -18,18 +18,6 @@ def get_loglevel() -> int:
 
 LOG_LEVEL = get_loglevel()
 
-@contextmanager
-def log_step(name: str, level=LOG_LEVEL, raise_exception: bool = True):
-    try:
-        logging.log(level=level, msg=f"Step({name}): Executing...")
-        yield
-        logging.log(level=level, msg=f"Step({name}): Executed.")
-    except Exception as ex:
-        logging.error(f"Step({name}): Failed! Reason: {ex}")
-
-        if raise_exception:
-            raise
-
 def get_value_or_default(key:str, default:any, **kwargs):
     """
     returns kwargs value or default
