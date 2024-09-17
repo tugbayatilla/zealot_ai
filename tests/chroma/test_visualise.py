@@ -1,7 +1,7 @@
 from ally_ai.chroma import Chroma, ChromaEmbeddingsVisualisor
 import pytest
 
-from ally_ai_core.settings.Settings import Settings
+from ally_ai_core import Settings
 from ally_ai_langchain import EmbeddingModel
 
 

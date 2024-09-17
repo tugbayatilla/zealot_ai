@@ -1,4 +1,4 @@
-from ally_ai_langsmith import Langsmith, Settings
+from ally_ai_langsmith import Langsmith
 import os
 from ..Utils import env_var_on_off
 
