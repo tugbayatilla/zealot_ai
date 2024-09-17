@@ -1,8 +1,10 @@
 from contextlib import contextmanager
 import logging
 import sys
+import inspect
+from functools import wraps
 
-# deprecated
+
 @contextmanager
 def log_step(name: str, level=logging.INFO, raise_exception: bool = True):
     try:
@@ -15,9 +17,6 @@ def log_step(name: str, level=logging.INFO, raise_exception: bool = True):
         if raise_exception:
             raise
 
-# deprecated
-import inspect
-from functools import wraps
 def logstep(message: str, level=logging.INFO, show_start: bool = True, show_finish: bool = True):
     """
     Decorator to log the start and finish of function execution.
@@ -56,10 +55,15 @@ def logstep(message: str, level=logging.INFO, show_start: bool = True, show_fini
     return decorator
 
 
-def load_test_logger(level = logging.INFO):
-  test_logger = logging.getLogger()
-  test_logger.setLevel(level=level)
-  console_handler = logging.StreamHandler(stream=sys.stdout)
-  console_handler.formatter = logging.Formatter('::> %(name)s - %(levelname)s - %(message)s')
-  test_logger.handlers.clear()
-  test_logger.addHandler(console_handler)
+
+from time import time
+
+def timed(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        start = time()
+        result = f(*args, **kwargs)
+        elapsed = time() - start
+        logging.info(f"{f.__name__} took {elapsed:.6f} seconds to finish")
+        return result
+    return wrapper
