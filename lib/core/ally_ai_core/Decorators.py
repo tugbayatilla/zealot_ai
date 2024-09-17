@@ -1,8 +1,8 @@
 from contextlib import contextmanager
 import logging
-import sys
 import inspect
 from functools import wraps
+from typing import Optional
 
 
 @contextmanager
@@ -56,14 +56,59 @@ def logstep(message: str, level=logging.INFO, show_start: bool = True, show_fini
 
 
 
-from time import time
 
-def timed(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        start = time()
-        result = f(*args, **kwargs)
-        elapsed = time() - start
-        logging.info(f"{f.__name__} took {elapsed:.6f} seconds to finish")
-        return result
-    return wrapper
+from time import perf_counter
+from typing import Optional, Callable, TypeVar, Any
+
+F = TypeVar('F', bound=Callable[..., Any])
+
+def timed(_func: Optional[F] = None, *, message: Optional[str] = None, level: int = logging.INFO) -> Callable[..., F]:
+    """
+    A decorator that logs the time taken by a function to execute.
+    Can be used with or without arguments.
+
+    Usage:
+        @timed
+        def func(...):
+            ...
+
+        @timed(message="Custom message", level=logging.DEBUG)
+        def func(...):
+            ...
+    """
+    def decorator(func: F) -> F:
+        if inspect.iscoroutinefunction(func):
+            @wraps(func)
+            async def async_wrapper(*args, **kwargs) -> Any:
+                start = perf_counter()
+                try:
+                    result = await func(*args, **kwargs)
+                    return result
+                finally:
+                    elapsed = perf_counter() - start
+                    log_message = f"{func.__name__} took {elapsed:.6f} seconds to finish"
+                    if message:
+                        log_message = f"{message} - {log_message}"
+                    logging.log(level, f"Timed: {log_message}")
+            return async_wrapper  # type: ignore
+        else:
+            @wraps(func)
+            def sync_wrapper(*args, **kwargs) -> Any:
+                start = perf_counter()
+                try:
+                    result = func(*args, **kwargs)
+                    return result
+                finally:
+                    elapsed = perf_counter() - start
+                    log_message = f"{func.__name__} took {elapsed:.6f} seconds to finish"
+                    if message:
+                        log_message = f"{message} - {log_message}"
+                    logging.log(level, f"Timed: {log_message}")
+            return sync_wrapper  # type: ignore
+
+    if _func is None:
+        # Decorator is called with arguments
+        return decorator
+    else:
+        # Decorator is used without arguments
+        return decorator(_func)
