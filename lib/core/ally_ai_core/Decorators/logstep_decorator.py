@@ -32,11 +32,11 @@ def logstep(
     """
 
     def decorator(func: F) -> F:
-        id = randrange(1, 100_000_000_000)
         if inspect.iscoroutinefunction(func):
 
             @wraps(func)
             async def awrapper(*args, **kwargs) -> Any:
+                id = randrange(1, 100_000_000_000)
                 if show_start:
                     logging.log(
                         level,
@@ -63,6 +63,7 @@ def logstep(
 
             @wraps(func)
             def wrapper(*args, **kwargs) -> Any:
+                id = randrange(1, 100_000_000_000)
                 if show_start:
                     logging.log(
                         level,
