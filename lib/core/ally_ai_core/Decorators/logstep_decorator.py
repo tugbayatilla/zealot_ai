@@ -37,13 +37,15 @@ def logstep(
             @wraps(func)
             async def awrapper(*args, **kwargs) -> Any:
                 id = randrange(1, 100_000_000_000)
-                if show_start:
-                    logging.log(
-                        level,
-                        f"{message} - Starting({id}) *{func.__name__}* with args: {args}, kwargs: {kwargs}",
-                    )
                 try:
+                    if show_start:
+                        logging.log(
+                            level,
+                            f"{message} - Starting({id}) *{func.__name__}* with args: {args}, kwargs: {kwargs}",
+                        )
+
                     result = await func(*args, **kwargs)
+
                     if show_finish:
                         logging.log(
                             level,
@@ -51,11 +53,9 @@ def logstep(
                         )
                     return result
                 except Exception as e:
-                    if show_finish:
-                        logging.log(
-                            level,
-                            f"{message} - Exception({id}) *{func.__name__}* raised an exception: {e}",
-                        )
+                    logging.exception(
+                        f"{message} - Exception({id}) *{func.__name__}* raised an exception: {e}"
+                    )
                     raise  # Re-raise the exception after logging
 
             return cast(F, awrapper)
@@ -64,13 +64,15 @@ def logstep(
             @wraps(func)
             def wrapper(*args, **kwargs) -> Any:
                 id = randrange(1, 100_000_000_000)
-                if show_start:
-                    logging.log(
-                        level,
-                        f"{message} - Starting({id}) *{func.__name__}* with args: {args}, kwargs: {kwargs}",
-                    )
                 try:
+                    if show_start:
+                        logging.log(
+                            level,
+                            f"{message} - Starting({id}) *{func.__name__}* with args: {args}, kwargs: {kwargs}",
+                        )
+
                     result = func(*args, **kwargs)
+
                     if show_finish:
                         logging.log(
                             level,
@@ -78,12 +80,10 @@ def logstep(
                         )
                     return result
                 except Exception as e:
-                    if show_finish:
-                        logging.log(
-                            level,
-                            f"{message} - Exception({id}) *{func.__name__}* raised an exception: {e}",
-                        )
-                    raise  # Re-raise the exception after logging
+                    logging.exception(
+                        f"{message} - Exception({id}) *{func.__name__}* raised an exception: {e}"
+                    )
+                    raise
 
             return cast(F, wrapper)
 

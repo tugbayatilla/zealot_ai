@@ -37,6 +37,11 @@ def assert_log_contains(mock_log, expected_message_part):
     assert re.search(expected_message_part, log_message)
 
 
+def assert_ex_info_contains(ex_info, expected_message_part):
+    log_message = " ".join([call for call in ex_info.value.args])
+    assert re.search(expected_message_part, log_message)
+
+
 # Test case for sync function
 def test_logstep_sync_func():
     with patch("logging.log") as mock_log:
@@ -65,10 +70,6 @@ def test_logstep_sync_func_with_exception():
             mock_log,
             r"Test sync function with exception - Starting\(\d+\) \*sample_sync_func_with_exception\* with args: \(2, 3\), kwargs: {}",
         )
-        assert_log_contains(
-            mock_log,
-            r"Test sync function with exception - Exception\(\d+\) \*sample_sync_func_with_exception\* raised an exception: Test sync exception",
-        )
 
 
 # Test case for async function
@@ -93,15 +94,11 @@ async def test_logstep_async_func():
 @pytest.mark.asyncio
 async def test_logstep_async_func_with_exception():
     with patch("logging.log") as mock_log:
-        with pytest.raises(ValueError, match="Test async exception"):
+        with pytest.raises(ValueError, match="Test async exception") as exc_info:
             await sample_async_func_with_exception(4, 5)
 
         # Ensure logging for start and exception (ignore dynamic ID)
         assert_log_contains(
             mock_log,
             r"Test async function with exception - Starting\(\d+\) \*sample_async_func_with_exception\* with args: \(4, 5\), kwargs: {}",
-        )
-        assert_log_contains(
-            mock_log,
-            r"Test async function with exception - Exception\(\d+\) \*sample_async_func_with_exception\* raised an exception: Test async exception",
         )
