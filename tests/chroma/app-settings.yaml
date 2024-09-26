@@ -6,7 +6,12 @@ embeddings:
   deployment_name: 'textembedding'
 
 chromadb:
-  host: https://igus-chromadb.black.igus.com
-  port: 8000
+  host: localhost
+  port: 8011
+  ssl: False
+
+chromadb_unavailable:
+  host: localhost
+  port: 0001
   ssl: False
   
