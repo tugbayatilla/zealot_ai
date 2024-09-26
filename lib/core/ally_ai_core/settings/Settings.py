@@ -3,17 +3,24 @@ import logging
 from typing import List, Literal
 from ..errors import YamlParseError
 import logging
+
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
 logger = logging.getLogger(__name__)
-import re 
+import re
 import os
+
 
 class Settings(dict):
     """
     Represents app settings yaml file
     """
 
-    def __init__(self, section: Literal['llm', 'embeddings', 'vectordb'], path='./app-settings.yaml', **kwargs):
+    def __init__(
+        self,
+        section: Literal["llm", "embeddings", "vectordb"],
+        path="./app-settings.yaml",
+        **kwargs,
+    ):
         """
         Reads given yaml file
         - Use kwargs to override values
@@ -33,28 +40,27 @@ class Settings(dict):
                 self[key] = value
 
             # override values
-            self.update({
-                key: value
-                for key, value in kwargs.items()
-            })
+            self.update({key: value for key, value in kwargs.items()})
 
         except Exception as ex:
             logger.error(
-                f"Failed to read '{section}' section from '{self.path}'. Original: {ex}")
+                f"Failed to read '{section}' section from '{self.path}'. Original: {ex}"
+            )
             raise
 
     def _read_yaml(self, path):
         try:
-            with open(path, 'r') as file:
+            with open(path, "r") as file:
                 yaml_content = yaml.safe_load(file)
                 return yaml_content
         except FileNotFoundError:
             raise
         except Exception as ex:
             raise YamlParseError(
-                f"File '{self.path}' could not be parsed correcty to yaml! Original: {ex}")
+                f"File '{self.path}' could not be parsed correcty to yaml! Original: {ex}"
+            )
 
-    def _set_nested_value(self, yaml_data:dict, keys:List[str], value):
+    def _set_nested_value(self, yaml_data: dict, keys: List[str], value):
         for key in keys[:-1]:
             yaml_data = yaml_data.setdefault(key, {})
         if value is not None and value:
@@ -62,12 +68,29 @@ class Settings(dict):
 
     def _replace_with_environment_variables(self, yaml_content):
         # Pattern to match environment variables with double underscores
-        pattern = re.compile(r'(?i)^[a-z][a-z0-9_]*(?:__[a-z][a-z0-9_]*)+$')
+        pattern = re.compile(r"(?i)^[a-z][a-z0-9_]*(?:__[a-z][a-z0-9_]*)+$")
 
         # Process each environment variable
         for key, value in os.environ.items():
             if pattern.match(key):
                 # Split the key into parts
-                keys = key.lower().split('__')
+                keys = key.lower().split("__")
                 # Update the YAML configuration
                 self._set_nested_value(yaml_content, keys, value)
+
+    def __repr__(self) -> str:
+        return self._hide_keys().__repr__()
+
+    def __str__(self) -> str:
+        return self._hide_keys().__str__()
+
+    def _hide_keys(self) -> dict:
+        temp = super().copy()
+        pairs = [(key, value) for key, value in temp.items() if "key" in key]
+        for key, value in pairs:
+            value_str = str(value)
+            if len(value_str) < 7:
+                temp[key] = "*******"
+            else:
+                temp[key] = f"{value_str[:2]}*****{value_str[-2:]}"
+        return temp
