@@ -16,7 +16,9 @@ def logstep(
     message: str,
     level: int = logging.INFO,
     show_start: bool = True,
+    show_start_args: bool = True,
     show_finish: bool = True,
+    show_finish_results: bool = True,
 ) -> Callable[[F], F]:
     """
     Decorator to log the start and finish of function execution.
@@ -41,7 +43,7 @@ def logstep(
                     if show_start:
                         logging.log(
                             level,
-                            f"{message} - Starting({id}) *{func.__name__}* with args: {args}, kwargs: {kwargs}",
+                            f"{message} - Starting({id}) *{func.__name__}* with args: {args if show_start_args else ''}, kwargs: {kwargs}",
                         )
 
                     result = await func(*args, **kwargs)
@@ -49,7 +51,7 @@ def logstep(
                     if show_finish:
                         logging.log(
                             level,
-                            f"{message} - Finished({id}) *{func.__name__}* with result: {result}",
+                            f"{message} - Finished({id}) *{func.__name__}* with result: {result if show_finish_results else ''}",
                         )
                     return result
                 except Exception as e:
@@ -68,7 +70,7 @@ def logstep(
                     if show_start:
                         logging.log(
                             level,
-                            f"{message} - Starting({id}) *{func.__name__}* with args: {args}, kwargs: {kwargs}",
+                            f"{message} - Starting({id}) *{func.__name__}* with args: {args if show_start_args else ''}, kwargs: {kwargs}",
                         )
 
                     result = func(*args, **kwargs)
@@ -76,7 +78,7 @@ def logstep(
                     if show_finish:
                         logging.log(
                             level,
-                            f"{message} - Finished({id}) *{func.__name__}* with result: {result}",
+                            f"{message} - Finished({id}) *{func.__name__}* with result: {result if show_finish_results else ''}",
                         )
                     return result
                 except Exception as e:
