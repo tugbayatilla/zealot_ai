@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ally-ai-chroma"
-version = "0.4.2"
+version = "0.4.3"
 authors = [{ name = "Tugbay Atilla", email = "tugbayatilla@gmail.com" }]
 description = "langchain chroma package for ally"
 readme = "README.md"
@@ -15,9 +15,10 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 dependencies = [
-  "ally-ai-core>=0.4.0",
-  "chromadb>=0.5.3",
-  "langchain_chroma>=0.1.2",
+  "ally-ai-core~=0.4.0",
+  "ally_ai_langchain~=0.2.0",
+  "chromadb~=0.5.3",
+  "langchain_chroma~=0.1.2",
 ]
 
 [project.urls]
