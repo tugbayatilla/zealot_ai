@@ -4,28 +4,28 @@ from unittest.mock import patch
 import asyncio
 import re
 
-from ally_ai_core.Decorators import logstep
+from ally_ai_core.decorators import logged
 
 
-@logstep("Test sync function", level=logging.INFO)
+@logged("Test sync function", level=logging.INFO)
 def sample_sync_func(x, y):
     return x + y
 
 
-@logstep("Test sync function with exception", level=logging.INFO)
+@logged("Test sync function with exception", level=logging.INFO)
 def sample_sync_func_with_exception(x, y):
     raise ValueError("Test sync exception")
 
 
 @pytest.mark.asyncio
-@logstep("Test async function", level=logging.INFO)
+@logged("Test async function", level=logging.INFO)
 async def sample_async_func(x, y):
     await asyncio.sleep(0.1)  # Simulating async work
     return x + y
 
 
 @pytest.mark.asyncio
-@logstep("Test async function with exception", level=logging.INFO)
+@logged("Test async function with exception", level=logging.INFO)
 async def sample_async_func_with_exception(x, y):
     await asyncio.sleep(0.1)
     raise ValueError("Test async exception")
@@ -43,7 +43,7 @@ def assert_ex_info_contains(ex_info, expected_message_part):
 
 
 # Test case for sync function
-def test_logstep_sync_func():
+def test_logged_sync_func():
     with patch("logging.log") as mock_log:
         result = sample_sync_func(2, 3)
         assert result == 5
@@ -60,7 +60,7 @@ def test_logstep_sync_func():
 
 
 # Test case for sync function raising exception
-def test_logstep_sync_func_with_exception():
+def test_logged_sync_func_with_exception():
     with patch("logging.log") as mock_log:
         with pytest.raises(ValueError, match="Test sync exception"):
             sample_sync_func_with_exception(2, 3)
@@ -74,7 +74,7 @@ def test_logstep_sync_func_with_exception():
 
 # Test case for async function
 @pytest.mark.asyncio
-async def test_logstep_async_func():
+async def test_logged_async_func():
     with patch("logging.log") as mock_log:
         result = await sample_async_func(4, 5)
         assert result == 9
@@ -92,7 +92,7 @@ async def test_logstep_async_func():
 
 # Test case for async function raising exception
 @pytest.mark.asyncio
-async def test_logstep_async_func_with_exception():
+async def test_logged_async_func_with_exception():
     with patch("logging.log") as mock_log:
         with pytest.raises(ValueError, match="Test async exception") as exc_info:
             await sample_async_func_with_exception(4, 5)
