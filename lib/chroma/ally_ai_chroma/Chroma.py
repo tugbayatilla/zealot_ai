@@ -5,9 +5,8 @@ from langchain_chroma import Chroma as LangChainChroma
 from ally_ai_core import Settings
 from ally_ai_langchain import EmbeddingModel
 from typing import Optional
-import logging
 
-from ally_ai_core.Decorators import logstep
+from ally_ai_core.decorators import logged
 
 
 class Chroma(LangChainChroma):
@@ -41,7 +40,7 @@ class Chroma(LangChainChroma):
         else:
             self._init_http_client(settings, embeddingModel, **kwargs)
 
-    @logstep(message="Chroma-Init-PersistDir")
+    @logged(message="Chroma-Init-PersistDir", show_data=False)
     def _init_persist_directory(self, embeddingModel, persist_directory, **kwargs):
         super().__init__(
             persist_directory=persist_directory,
@@ -50,7 +49,7 @@ class Chroma(LangChainChroma):
             **kwargs,
         )
 
-    @logstep(message="Chroma-Init-HttpClient")
+    @logged(message="Chroma-Init-HttpClient", show_data=False)
     def _init_http_client(self, settings, embeddingModel, **kwargs):
         chroma_client = chromadb.HttpClient(
             **settings, settings=ChromaSettings(anonymized_telemetry=False)
