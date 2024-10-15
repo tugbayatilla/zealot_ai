@@ -1,8 +1,7 @@
-from . import utils as Utils
+from . import utils
 from .settings.Settings import Settings
-from . import errors as Errors
-from . import Decorators
-from . import Decorators as decorators
-from . import ContextManagers
+from . import errors
+from . import decorators
+from . import context_managers
 
-__all__ = ["Utils", "Settings", "Errors", "Decorators", "decorators", "ContextManagers"]
+__all__ = ["utils", "Settings", "errors", "decorators", "context_managers"]

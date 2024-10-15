@@ -15,10 +15,9 @@ F = TypeVar("F", bound=Callable[..., Any])
 def logstep(
     message: str,
     level: int = logging.INFO,
-    show_start: bool = True,
-    show_start_args: bool = True,
-    show_finish: bool = True,
-    show_finish_results: bool = True,
+    show_in: bool = True,
+    show_out: bool = True,
+    show_data: bool = True,
 ) -> Callable[[F], F]:
     """
     Decorator to log the start and finish of function execution.
@@ -26,8 +25,9 @@ def logstep(
     Args:
         message (str): Custom message to include in logs.
         level (int): Logging level.
-        show_start (bool): Whether to log the start of the function.
-        show_finish (bool): Whether to log the finish of the function.
+        show_in (bool): Whether to log the start of the function.
+        show_out (bool): Whether to log the finish of the function.
+        show_data (bool): Whether to log the args and kwargs of the function.
 
     Returns:
         Callable: The decorated function with logging.
@@ -40,18 +40,18 @@ def logstep(
             async def awrapper(*args, **kwargs) -> Any:
                 id = randrange(1, 100_000_000_000)
                 try:
-                    if show_start:
+                    if show_in:
                         logging.log(
                             level,
-                            f"{message} - Starting({id}) *{func.__name__}* with args: {args if show_start_args else ''}, kwargs: {kwargs}",
+                            f"{message} - Starting({id}) *{func.__name__}* with args: {args if show_data else ''}, kwargs: {kwargs if show_data else ''}",
                         )
 
                     result = await func(*args, **kwargs)
 
-                    if show_finish:
+                    if show_out:
                         logging.log(
                             level,
-                            f"{message} - Finished({id}) *{func.__name__}* with result: {result if show_finish_results else ''}",
+                            f"{message} - Finished({id}) *{func.__name__}* with result: {result if show_data else ''}",
                         )
                     return result
                 except Exception as e:
@@ -67,18 +67,18 @@ def logstep(
             def wrapper(*args, **kwargs) -> Any:
                 id = randrange(1, 100_000_000_000)
                 try:
-                    if show_start:
+                    if show_in:
                         logging.log(
                             level,
-                            f"{message} - Starting({id}) *{func.__name__}* with args: {args if show_start_args else ''}, kwargs: {kwargs}",
+                            f"{message} - Starting({id}) *{func.__name__}* with args: {args if show_data else ''}, kwargs: {kwargs if show_data else ''}",
                         )
 
                     result = func(*args, **kwargs)
 
-                    if show_finish:
+                    if show_out:
                         logging.log(
                             level,
-                            f"{message} - Finished({id}) *{func.__name__}* with result: {result if show_finish_results else ''}",
+                            f"{message} - Finished({id}) *{func.__name__}* with result: {result if show_data else ''}",
                         )
                     return result
                 except Exception as e:
