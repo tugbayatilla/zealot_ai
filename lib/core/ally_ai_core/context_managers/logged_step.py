@@ -2,11 +2,10 @@ from contextlib import contextmanager, asynccontextmanager
 import logging
 from typing import Optional, Generator, AsyncGenerator
 
+
 @contextmanager
-def log_step(
-    name: str,
-    level: int = logging.INFO,
-    raise_exception: bool = True
+def logged_step(
+    name: str, level: int = logging.INFO, raise_exception: bool = True
 ) -> Generator[None, None, None]:
     """
     Context manager to log the start and finish of a step, and handle exceptions.
@@ -29,11 +28,10 @@ def log_step(
         if raise_exception:
             raise
 
+
 @asynccontextmanager
-async def alog_step(
-    name: str,
-    level: int = logging.INFO,
-    raise_exception: bool = True
+async def alogged_step(
+    name: str, level: int = logging.INFO, raise_exception: bool = True
 ) -> AsyncGenerator[None, None]:
     """
     Asynchronous context manager to log the start and finish of a step, and handle exceptions.
@@ -55,4 +53,3 @@ async def alog_step(
         logging.error(f"Step({name}): Failed! Reason: {ex}")
         if raise_exception:
             raise
-

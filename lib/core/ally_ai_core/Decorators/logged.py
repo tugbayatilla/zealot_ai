@@ -12,7 +12,7 @@ logging.basicConfig(
 F = TypeVar("F", bound=Callable[..., Any])
 
 
-def logstep(
+def logged(
     message: str,
     level: int = logging.INFO,
     show_in: bool = True,
@@ -20,7 +20,7 @@ def logstep(
     show_data: bool = True,
 ) -> Callable[[F], F]:
     """
-    Decorator to log the start and finish of function execution.
+    Decorator to log the start and finish of a function execution.
 
     Args:
         message (str): Custom message to include in logs.

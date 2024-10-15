@@ -4,7 +4,7 @@ import pytest
 import logging
 import re
 import asyncio
-from ally_ai_core.context_managers import log_step, alog_step
+from ally_ai_core.context_managers import logged_step, alogged_step
 
 # Configure logging for tests
 logging.basicConfig(
@@ -18,41 +18,41 @@ logging.basicConfig(
 
 # Sample synchronous function
 def process_data(data):
-    with log_step("Process Data"):
+    with logged_step("Process Data"):
         # Simulate data processing
         processed = data.upper()
         return processed
 
 
 def process_data_custom(data):
-    with log_step("Custom Process", level=logging.DEBUG, raise_exception=False):
+    with logged_step("Custom Process", level=logging.DEBUG, raise_exception=False):
         # Simulate data processing
         processed = data.lower()
         return processed
 
 
 def faulty_process():
-    with log_step("Faulty Process"):
+    with logged_step("Faulty Process"):
         raise ValueError("An error occurred during processing")
 
 
 # Sample asynchronous function
 async def async_reverse(data):
-    async with alog_step("Async Process Data"):
+    async with alogged_step("Async Process Data"):
         # Simulate async data processing
         await asyncio.sleep(0.1)
         return data[::-1]
 
 
 async def async_faulty_process():
-    async with alog_step("Async Faulty Process"):
+    async with alogged_step("Async Faulty Process"):
         await asyncio.sleep(0.1)
         raise RuntimeError("Async error occurred")
 
 
 # Function with no return
 def void_function():
-    with log_step("Void Function"):
+    with logged_step("Void Function"):
         pass
 
 
@@ -174,7 +174,7 @@ def test_log_step_no_raise_exception(caplog):
     with caplog.at_level(logging.INFO):
         # Attempt to raise an exception without re-raising
         try:
-            with log_step("Faulty Process", raise_exception=False):
+            with logged_step("Faulty Process", raise_exception=False):
                 raise ValueError("An error occurred during processing")
         except ValueError:
             # Exception should not be raised since raise_exception=False
@@ -195,8 +195,8 @@ def test_log_step_no_raise_exception(caplog):
 # 8. Test context manager with nested context managers
 def test_log_step_nested(caplog):
     with caplog.at_level(logging.INFO):
-        with log_step("Outer Step"):
-            with log_step("Inner Step"):
+        with logged_step("Outer Step"):
+            with logged_step("Inner Step"):
                 pass
 
         # Check logs for both steps
@@ -220,7 +220,7 @@ def test_log_step_nested(caplog):
 # 9. Test context manager with empty name
 def test_log_step_empty_name(caplog):
     with caplog.at_level(logging.INFO):
-        with log_step(""):
+        with logged_step(""):
             pass
 
         # Check logs with empty step name
@@ -235,7 +235,7 @@ def test_log_step_empty_name(caplog):
 # 10. Test context manager with complex name containing special characters
 def test_log_step_complex_name(caplog):
     with caplog.at_level(logging.INFO):
-        with log_step("Complex-Step_123!"):
+        with logged_step("Complex-Step_123!"):
             pass
 
         # Check logs with complex step name
@@ -254,7 +254,7 @@ def test_log_step_complex_name(caplog):
 async def test_async_log_step_with_exception(caplog):
     with caplog.at_level(logging.INFO):
         try:
-            async with alog_step("Async Faulty Step"):
+            async with alogged_step("Async Faulty Step"):
                 raise RuntimeError("Async runtime error")
         except RuntimeError:
             pass
@@ -277,7 +277,7 @@ async def test_async_log_step_no_raise_exception(caplog):
     with caplog.at_level(logging.INFO):
         # Attempt to raise an exception without re-raising
         try:
-            async with alog_step("Async Faulty Step", raise_exception=False):
+            async with alogged_step("Async Faulty Step", raise_exception=False):
                 raise RuntimeError("Async runtime error")
         except RuntimeError:
             pytest.fail("Exception was raised despite raise_exception=False")
@@ -299,12 +299,12 @@ def test_log_step_multiple_exceptions(caplog):
     with caplog.at_level(logging.INFO):
         # First exception
         with pytest.raises(ValueError, match="First error"):
-            with log_step("Multiple Exceptions"):
+            with logged_step("Multiple Exceptions"):
                 raise ValueError("First error")
 
         # Second exception
         with pytest.raises(TypeError, match="Second error"):
-            with log_step("Multiple Exceptions"):
+            with logged_step("Multiple Exceptions"):
                 raise TypeError("Second error")
 
         # Check logs for both exceptions
@@ -332,7 +332,7 @@ counter = 0
 
 def increment_counter():
     global counter
-    with log_step("Increment Counter"):
+    with logged_step("Increment Counter"):
         global counter
         counter += 1
 
@@ -357,7 +357,7 @@ def test_log_step_side_effect(caplog):
 
 # 15. Test context manager with functions returning complex objects
 def return_complex_object():
-    with log_step("Return Complex Object"):
+    with logged_step("Return Complex Object"):
         return {"key": "value", "number": 42}
 
 

@@ -1,6 +1,3 @@
-from .log_step_contextmanager import log_step, alog_step
+from .logged_step import logged_step, alogged_step
 
-__all__ = [
-    'log_step',
-    'alog_step'
-]
+__all__ = ["logged_step", "alogged_step"]

@@ -1,7 +1,4 @@
-from .logstep_decorator import logstep
-from .timed_decorator import timed
+from .logged import logged
+from .timed import timed
 
-__all__ = [
-    'logstep',
-    'timed'
-]
+__all__ = ["logged", "timed"]
