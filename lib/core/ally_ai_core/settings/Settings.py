@@ -1,11 +1,8 @@
 import yaml
-import logging
 from typing import List, Literal
 from ..errors import YamlParseError
 import logging
 
-logging.basicConfig(format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
-logger = logging.getLogger(__name__)
 import re
 import os
 
@@ -43,7 +40,7 @@ class Settings(dict):
             self.update({key: value for key, value in kwargs.items()})
 
         except Exception as ex:
-            logger.error(
+            logging.error(
                 f"Failed to read '{section}' section from '{self.path}'. Original: {ex}"
             )
             raise

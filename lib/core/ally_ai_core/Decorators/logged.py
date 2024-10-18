@@ -18,6 +18,7 @@ def logged(
     show_in: bool = True,
     show_out: bool = True,
     show_data: bool = True,
+    logger: logging.Logger = logging.getLogger(),
 ) -> Callable[[F], F]:
     """
     Decorator to log the start and finish of a function execution.
@@ -41,7 +42,7 @@ def logged(
                 id = randrange(1, 100_000_000_000)
                 try:
                     if show_in:
-                        logging.log(
+                        logger.log(
                             level,
                             f"{message} - Starting({id}) *{func.__name__}* with args: {args if show_data else ''}, kwargs: {kwargs if show_data else ''}",
                         )
@@ -49,16 +50,16 @@ def logged(
                     result = await func(*args, **kwargs)
 
                     if show_out:
-                        logging.log(
+                        logger.log(
                             level,
                             f"{message} - Finished({id}) *{func.__name__}* with result: {result if show_data else ''}",
                         )
                     return result
                 except Exception as e:
-                    logging.exception(
+                    logger.exception(
                         f"{message} - Exception({id}) *{func.__name__}* raised an exception: {e}"
                     )
-                    raise  # Re-raise the exception after logging
+                    raise  # Re-raise the exception after logger
 
             return cast(F, awrapper)
         else:
@@ -68,7 +69,7 @@ def logged(
                 id = randrange(1, 100_000_000_000)
                 try:
                     if show_in:
-                        logging.log(
+                        logger.log(
                             level,
                             f"{message} - Starting({id}) *{func.__name__}* with args: {args if show_data else ''}, kwargs: {kwargs if show_data else ''}",
                         )
@@ -76,13 +77,13 @@ def logged(
                     result = func(*args, **kwargs)
 
                     if show_out:
-                        logging.log(
+                        logger.log(
                             level,
                             f"{message} - Finished({id}) *{func.__name__}* with result: {result if show_data else ''}",
                         )
                     return result
                 except Exception as e:
-                    logging.exception(
+                    logger.exception(
                         f"{message} - Exception({id}) *{func.__name__}* raised an exception: {e}"
                     )
                     raise

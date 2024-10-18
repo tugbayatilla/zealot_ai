@@ -13,6 +13,7 @@ def timed(
     *,
     message: Optional[str] = None,
     level: int = logging.INFO,
+    logger: logging.Logger = logging.getLogger(),
 ) -> Callable[..., F]:
     """
     A decorator that logs the time taken by a function to execute.
@@ -44,7 +45,7 @@ def timed(
                     )
                     if message:
                         log_message = f"{message} - {log_message}"
-                    logging.log(level, f"Timed: {log_message}")
+                    logger.log(level, f"Timed: {log_message}")
 
             return async_wrapper  # type: ignore
         else:
@@ -62,7 +63,7 @@ def timed(
                     )
                     if message:
                         log_message = f"{message} - {log_message}"
-                    logging.log(level, f"Timed: {log_message}")
+                    logger.log(level, f"Timed: {log_message}")
 
             return sync_wrapper  # type: ignore
 
