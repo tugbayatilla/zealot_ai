@@ -101,6 +101,7 @@ def logged(
     show_data: bool = True,
     logger: logging.Logger = logging.getLogger(),
 ) -> Callable[[F], F]:
+    """Warning: use trace and Tracer instead!"""
     return Logged(
         show_in=show_in, show_out=show_out, show_data=show_data, logger=logger
     ).logged(message=message)
