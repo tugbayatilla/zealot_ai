@@ -62,7 +62,7 @@ class Tracer:
                         if show_in:
                             logger.log(
                                 level=logger.level,
-                                msg=f"{message} - IN({id}) *{func.__name__}* {'with args:' + args if show_data else ''} {', kwargs:' + kwargs if show_data else ''}",
+                                msg=f"{message} - IN({id}) *{func.__name__}* with args: {args if show_data else ''} , kwargs: {kwargs if show_data else ''}",
                             )
 
                         result = await func(*args, **kwargs)
@@ -70,7 +70,7 @@ class Tracer:
                         if show_out:
                             logger.log(
                                 level=logger.level,
-                                msg=f"{message} - OUT({id}) *{func.__name__}* {'with result:' + result if show_data else ''}",
+                                msg=f"{message} - OUT({id}) *{func.__name__}* with result: {result if show_data else ''}",
                             )
                         return result
                     except Exception as e:
@@ -89,7 +89,7 @@ class Tracer:
                         if show_in:
                             logger.log(
                                 level=logger.level,
-                                msg=f"{message} - IN({id}) *{func.__name__}* {'with args:' + args if show_data else ''} {', kwargs: ' + kwargs if show_data else ''}",
+                                msg=f"{message} - IN({id}) *{func.__name__}* with args: {args if show_data else ''} , kwargs: {kwargs if show_data else ''}",
                             )
 
                         result = func(*args, **kwargs)
@@ -97,7 +97,7 @@ class Tracer:
                         if show_out:
                             logger.log(
                                 level=logger.level,
-                                msg=f"{message} - OUT({id}) *{func.__name__}* {'with result: '+result if show_data else ''}",
+                                msg=f"{message} - OUT({id}) *{func.__name__}* with result: {result if show_data else ''}",
                             )
                         return result
                     except Exception as e:
